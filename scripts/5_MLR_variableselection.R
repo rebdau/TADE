@@ -17,16 +17,22 @@ standdat
 #  forward (in only), second one uses backward (out only), and last allows
 #  variables to be dropped and later to enter back in (both).  
 ############################################################################################
-model1 <- lm(vol.ha ~ .,data = standdat)
-summary(model1)
-step.model1 <- step(model1,direction=c("forward"))
+null <- lm(vol.ha ~ 1,data = standdat)
+summary(null)
+full <- lm(vol.ha ~ .,data = standdat)
+summary(full)
+
+step.model1 <- step(null, scope=list(lower=null, upper=full), direction="forward")
 summary(step.model1)
-
-step.model2 <- step(model1,direction=c("backward"))
+step.model2 <- step(full,direction=c("backward"))
 summary(step.model2)
-
-step.model3 <- step(model1,direction=c("both"))
+step.model3 <- step(null, scope = list(upper=full), direction=c("both"))
 summary(step.model3)
+step.model4 <- step(full,direction=c("forward"))
+summary(step.model4)
+
+
+
 
 #############################################################################################
 #  All Subsets Regression
